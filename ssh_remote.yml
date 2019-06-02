@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: add user and generate a key
+    user:
+      name: "{{ username }}"
+      generate_ssh_key: yes
+  - name: make direcotry
+    file:
+      path: "/home/{{ username }}/.ssh"
+      state: directory
+  - name: create empty file
+    file:
+      path: "/home/{{ username }}/.ssh/authorized_keys"
+      state: touch
+  - name: put pubkey
+    lineinfile:
+      path: "/home/{{ username }}/.ssh/authorized_keys"
+      line: "{{ pubkey }}"
