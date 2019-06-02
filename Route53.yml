@@ -1,0 +1,11 @@
+- name: Amazons Route53 DNS service
+  hosts: localhost
+  tasks: 
+    - name: Amazons Route53 DNS service
+      route53:
+        state: "{{ state }}"
+        zone: "{{ domain_name }}"
+        record: "{{ dns_record }}"
+        type: A
+        ttl: 3600
+        value: "{{ ip_value }}"
