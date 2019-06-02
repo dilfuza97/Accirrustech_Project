@@ -1,0 +1,27 @@
+- hosts: all
+  become_user: centos
+  become_method: sudo
+  tasks:
+    - name: check for upfates RedHat OS Family
+      when: ansible_os_family == "RedHat"
+      shell: yum check-update | grep ^kernel.x | cat
+      args:
+        warn: False
+      register: redhat
+    - set_fact: update="{{redhat}}"
+      when: redhat.changed
+
+    - name: check for updates on Debian OS Family
+      when: ansible_os_family == "Debian"
+      shell: apt list --upgradable | grep ^linux-image | cat
+      args:
+        warn: False
+      register: debian
+    - set_fact: update="{{debian}}"
+      when: debian.changed
+    
+    - name: Send notification message via Slack
+      when: update.stdout != ""
+      slack:
+        token: "-----"
+        msg: "update kernel on {{inventory_hostname}}"
