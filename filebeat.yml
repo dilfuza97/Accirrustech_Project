@@ -1,6 +1,6 @@
 ---
 - name: Install filebeat
-  hosts: localhost
+  hosts: elk.acirrustech.com
   become: yes
   become_user: root
   tasks:
@@ -38,8 +38,8 @@
       - name: Line change
         replace: 
           path: /etc/filebeat/filebeat.yml 
-          regexp: '\ \ hosts: \["localhost:9200"\]' 
-          replace: '  #hosts: ["localhost:9200"]'
+          regexp: '\ \ hosts: \["elk.acirrustech.com:9200"\]' 
+          replace: '  #hosts: ["elk.acirrustech.com:9200"]'
       - name: Line change
         replace: 
           path: /etc/filebeat/filebeat.yml 
